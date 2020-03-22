@@ -1,9 +1,16 @@
 package edu.mcdaniel.java2206.lab6;
 
-import edu.mcdaniel.java2206.lab6.components.Example;
+import edu.mcdaniel.java2206.lab6.components.InflationRateFileReader;
+import edu.mcdaniel.java2206.lab6.exceptions.InflationRateFileReaderException;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.util.Date;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * This class is designed to start/wrap your class.
@@ -18,7 +25,7 @@ public class Application {
     /**
      * The logging mechanism of the class.
      */
-    private Logger log;
+    private static Logger log = LogManager.getLogger(Application.class);
 
 
     //=============================================================================================
@@ -55,17 +62,31 @@ public class Application {
         SpringApplication.run(Application.class, args);
 
         //===// User Defined Behavior //=========================================================//
-        //TODO: INSTANTIATE YOUR APPLICATION'S PRIMARY CLASS
-        Example exampleWithStandardGreeting = new Example();
+        //Please start here and make the application work!
+        try {
+            InflationRateFileReader inflationRateFileReader = new InflationRateFileReader();
+            inflationRateFileReader.validate();
 
-        Example exampleWithCustomGreeting = new Example()
-                .withGreeting("Greetings")
-                .withAudience("Earthlings");
+            inflationRateFileReader.setUp();
 
-        //TODO: CALL YOUR APPLICATION'S PRIMARY CLASS METHODS
-        System.out.println(exampleWithStandardGreeting.getMessage());
+            inflationRateFileReader.read();
 
-        System.out.println(exampleWithCustomGreeting.getMessage());
+            Map<Integer, Double> inflationRates = inflationRateFileReader.getInflationRates();
+            Map<Integer, Date> inflationDates = inflationRateFileReader.getInflationDates();
+
+
+            Set<Map.Entry<Integer, Double>> entrySet = inflationRates.entrySet();
+            for (Map.Entry<Integer, Double> entry : entrySet) {
+                log.info("The position {} is associated with an average inflation rate of {}% for year {}.",
+                        entry.getKey(), entry.getValue(),
+                        inflationDates.get(entry.getKey()));
+
+            }
+
+        } catch (NullPointerException | InflationRateFileReaderException npe){
+            log.error(npe);
+        }
+
 
     }
 
