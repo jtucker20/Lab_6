@@ -90,9 +90,9 @@ public class DowFileReader {
     /**
      * This major method initializes the file.
      */
-    public void setUp() throws InflationRateFileReaderException {
+    public void setUp() throws DowFileReaderException {
         if(!validate()){
-           throw new InflationRateFileReaderException("Invalid File Setup.");
+           throw new DowFileReaderException("Invalid File Setup.");
         }
 
         //Here we setup/instantiate the Map as a hash map to hold the data.
@@ -107,9 +107,9 @@ public class DowFileReader {
     /**
      * Major method to read in the data
      */
-    public void read() throws InflationRateFileReaderException {
+    public void read() throws DowFileReaderException {
         //TODO: FINISH THIS CHECK!!!
-        if(!validate()){
+        if(!validate() || ){
             //We validate that all parts are actually active
             throw new DowFileReaderException("Invalid Setup!");
         }
@@ -147,6 +147,7 @@ public class DowFileReader {
      */
     public void readAline(String line, int linePos) throws InflationRateFileReaderException {
 
+        //TODO: FOLLOW THE EXAMPLE IN InflationRateFileReader for help with this method!
 
     }
 
@@ -163,12 +164,6 @@ public class DowFileReader {
         return this.dowFile != null && this.dowFile.canRead();
     }
 
-    /**
-     * Percent from string remover
-     */
-    private String clean(String input){
-        return input.substring(0, input.indexOf('%'));
-    }
 
     //=============================================================================================
     // Getters and Setters
