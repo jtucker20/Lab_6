@@ -1,6 +1,8 @@
 package edu.mcdaniel.java2206.lab6;
 
+import edu.mcdaniel.java2206.lab6.components.DowFileReader;
 import edu.mcdaniel.java2206.lab6.components.InflationRateFileReader;
+import edu.mcdaniel.java2206.lab6.exceptions.DowFileReaderException;
 import edu.mcdaniel.java2206.lab6.exceptions.InflationRateFileReaderException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -87,6 +89,33 @@ public class Application {
             log.error(npe);
         }
 
+        try{
+            DowFileReader dowFileReader = new DowFileReader();
+            dowFileReader.validate();
+            dowFileReader.setUp();
+            dowFileReader.read();
+
+            Map<Integer, Double> opens = dowFileReader.getDowOpens();
+            Map<Integer, Double> highs = dowFileReader.getDowHighs();
+            Map<Integer, Double> lows = dowFileReader.getDowLows();
+            Map<Integer, Double> closes = dowFileReader.getDowClose();
+            Map<Integer, Date> dates = dowFileReader.getDowDates();
+
+
+            Set<Map.Entry<Integer, Double>> entrySet = opens.entrySet();
+            for (Map.Entry<Integer, Double> entry : entrySet) {
+                log.info("The Open {}. The High {}. The Low {}. The Close {}. For {}",
+                                entry.getValue(),
+                                highs.get(entry.getKey()),
+                                lows.get(entry.getKey()),
+                                closes.get(entry.getKey()),
+                                dates.get(entry.getKey()).toString()
+                                );
+
+            }
+        } catch (DowFileReaderException dfre){
+            log.error(dfre);
+        }
 
     }
 

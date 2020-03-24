@@ -5,12 +5,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * This class will read a file.  We will manipulate the data later.
@@ -109,6 +108,7 @@ public class InflationRateFileReader {
         // You use this EVERY time there is a resource with auto-closeable abilities.
         try(FileReader fileReader = new FileReader(this.irFile); //Here we make the file reader
             BufferedReader reader = new BufferedReader(fileReader)){  //Here we make a buffered reader
+
             String line = "";  //This will hold the lines from the file reader
             int linePos = 0;  //This will hold the position the data was taken from.
             while((line = reader.readLine()) != null){  //This complicated logic takes a line from the reader
