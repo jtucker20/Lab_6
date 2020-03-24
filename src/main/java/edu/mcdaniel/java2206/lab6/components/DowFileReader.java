@@ -109,7 +109,7 @@ public class DowFileReader {
      */
     public void read() throws DowFileReaderException {
         //TODO: FINISH THIS CHECK!!!
-        if(!validate() || ){
+        if(!validate() || this.dowOpens==null || this.dowHighs==null || this.dowLows==null || this.dowClose ==null || this.dowDates==null){
             //We validate that all parts are actually active
             throw new DowFileReaderException("Invalid Setup!");
         }
@@ -138,6 +138,7 @@ public class DowFileReader {
                 //The line reader will return a null when eof hits.
 
                 //TODO: YOU HAVE TO PUT IN THE LOGIC TO MAKE THIS WORK!
+                readAline(line, linePos);
             }
         }
     }
@@ -145,9 +146,10 @@ public class DowFileReader {
     /**
      * Method to parse a single line
      */
-    public void readAline(String line, int linePos) throws InflationRateFileReaderException {
+    public void readAline(String line, int linePos) throws DowFileReaderException {
 
         //TODO: FOLLOW THE EXAMPLE IN InflationRateFileReader for help with this method!
+
 
     }
 

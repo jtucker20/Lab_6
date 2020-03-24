@@ -1,5 +1,8 @@
 package edu.mcdaniel.java2206.lab6.exceptions;
 
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+
 public class InflationRateFileReaderException extends Exception {
 
     public InflationRateFileReaderException(){
