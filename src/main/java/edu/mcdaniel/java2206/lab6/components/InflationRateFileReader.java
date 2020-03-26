@@ -116,8 +116,12 @@ public class InflationRateFileReader {
                 //The line reader will return a null when eof hits.
 
                 //Here we read a line into our data stream.
-                readAline(line, linePos); //This function is called for every line.
-
+                try {
+                    readAline(line, linePos); //This function is called for every line.
+                }catch (InflationRateFileReaderException irfre){
+                    log.error("Skipped a line!  {}", linePos);
+                    log.error(irfre);
+                }
                 //Here we increment to let us know we got to a new line.
                 linePos++;
             }

@@ -91,20 +91,24 @@ public class Application {
 
         try{
             DowFileReader dowFileReader = new DowFileReader();
+            log.error("We are here");
             dowFileReader.validate();
+            log.error("We are now here");
             dowFileReader.setUp();
+            log.error("We are almost there");
             dowFileReader.read();
+            log.error("We are at the end");
 
             Map<Integer, Double> opens = dowFileReader.getDowOpens();
             Map<Integer, Double> highs = dowFileReader.getDowHighs();
             Map<Integer, Double> lows = dowFileReader.getDowLows();
             Map<Integer, Double> closes = dowFileReader.getDowClose();
             Map<Integer, Date> dates = dowFileReader.getDowDates();
-
+            log.error(dates.size());
 
             Set<Map.Entry<Integer, Double>> entrySet = opens.entrySet();
             for (Map.Entry<Integer, Double> entry : entrySet) {
-                log.info("The Open {}. The High {}. The Low {}. The Close {}. For {}",
+                log.error("The Open {}. The High {}. The Low {}. The Close {}. For {}",
                                 entry.getValue(),
                                 highs.get(entry.getKey()),
                                 lows.get(entry.getKey()),

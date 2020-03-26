@@ -109,7 +109,8 @@ public class DowFileReader {
      */
     public void read() throws DowFileReaderException {
         //TODO: FINISH THIS CHECK!!!
-        if(!validate() || ){
+        if(!validate() || this.dowOpens == null || this.dowHighs == null || this.dowLows == null
+                || this.dowClose == null || this.dowDates == null){
             //We validate that all parts are actually active
             throw new DowFileReaderException("Invalid Setup!");
         }
@@ -138,6 +139,14 @@ public class DowFileReader {
                 //The line reader will return a null when eof hits.
 
                 //TODO: YOU HAVE TO PUT IN THE LOGIC TO MAKE THIS WORK!
+                try {
+                    readAline(line, linePos); //This function is called for every line.
+                }catch (DowFileReaderException | InflationRateFileReaderException drfre){
+                    log.error("Skipped a line!  {}", linePos);
+                    log.error(drfre);
+                }
+                //Here we increment to let us know we got to a new line.
+                linePos++;
             }
         }
     }
@@ -145,10 +154,57 @@ public class DowFileReader {
     /**
      * Method to parse a single line
      */
-    public void readAline(String line, int linePos) throws InflationRateFileReaderException {
+    public void readAline(String line, int linePos) throws InflationRateFileReaderException, DowFileReaderException {
 
         //TODO: FOLLOW THE EXAMPLE IN InflationRateFileReader for help with this method!
+        if(linePos < 0){
+            throw new DowFileReaderException("Bad Line Position: " + linePos);
+        }
+        if(linePos < 2){
+            return;  // We don't want to read in the header lines!
+        }
+        String[] lineParts = line.split(","); // Here we split on commas as this file is comma
+        // separated.
+        log.error("Line parts {}", lineParts[0]);
 
+        //I am expecting that there will be 7 columns, All filled with data.
+        if(lineParts.length == 7) {
+            String year = lineParts[0];//Since the year is at pos 0;
+            String open = lineParts[1];
+            String high = lineParts[2];
+            String low = lineParts[3];
+            String close = lineParts[4];
+            String vol = lineParts[6]; //Since the volume is at pos 6.
+
+            //Now to check we have values we are expecting!
+            if(year == null || year.isBlank() || year.isEmpty() || vol == null || vol.isBlank() || vol.isEmpty()){
+                throw new DowFileReaderException("Bad Data in line " + linePos + " Line Value " + line);
+            }
+            //First we set the date by parsing the string value we get from the file into an integer that we can enter
+            Date date = new Date(Integer.parseInt(year.substring(0,4)),Integer.parseInt(year.substring(5,7))-1,
+                    Integer.parseInt(year.substring(8,10)));
+            this.dowDates.put(linePos, date);
+            //Then we parse the string value in the second position to our open value
+            double opens = Double.parseDouble(open);
+            this.dowOpens.put(linePos, opens);
+            //We do the same with high
+            double highs = Double.parseDouble(high);
+            this.dowHighs.put(linePos, highs);
+            //Low
+            double lows = Double.parseDouble(low);
+            this.dowLows.put(linePos, lows);
+            //And finally we do it with the close data
+            double closes = Double.parseDouble(close);
+            this.dowClose.put(linePos, closes);
+
+            log.info("The DOW on {} had an open rate of {}, a high of {}, a low of {}, " +
+                    "and a close of {}.", year, open, high, low, close);
+            // This takes each of the string values and puts them into a readable form to print out
+        } else if(lineParts.length == 0 ) {
+            throw new DowFileReaderException("Couldn't read line " + linePos);
+        } else {
+            log.error("Line " + linePos + " was " + lineParts.length + " long and couldn't be read, it's being skipped");
+        }
     }
 
 
