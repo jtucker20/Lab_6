@@ -1,6 +1,7 @@
 package edu.mcdaniel.java2206.lab6_AndreBerry.components;
 
 import edu.mcdaniel.java2206.lab6_AndreBerry.exceptions.DowFileReaderException;
+import edu.mcdaniel.java2206.lab6_AndreBerry.exceptions.InflationRateFileReaderException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -8,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -152,8 +154,50 @@ public class DowFileReader {
      */
     public void readAline(String line, int linePos) throws DowFileReaderException {
 
-        //TODO: FOLLOW THE EXAMPLE IN InflationRateFileReader for help with this method!
+        {
+            if(linePos < 0)
+            {
+                throw new DowFileReaderException("Bad Line Position: " + linePos);
+            }
+            if(linePos < 3)
+            {
+                return;  // We don't want to read in the header lines!
+            }
+            String[] lineParts = line.split(","); // Here we split on commas as this file is comma
+            // separated.
 
+            //I am expecting that there will be 14 columns, All filled with data.
+            if(lineParts.length == 14)
+            {
+                String year = lineParts[0]; //Since the year is at pos 0;
+                String avg = lineParts[13]; //Since the average is at pos 13.
+
+                //Now to check we have values we are expecting!
+                if(year == null || year.isBlank() || year.isEmpty() || avg == null || avg.isBlank() || avg.isEmpty()){
+                    throw new DowFileReaderException("Bad Data in line " + linePos + " Line Value " + line);
+                }
+
+
+                //Here we set the date
+                Date date = new Date((Integer.parseInt(year) - 1900), Calendar.DECEMBER, 31);  // WE subtract 1900
+                // for some stupid reason.
+                this.inflationDates.put(linePos, date);
+                //Here we set the double
+                String cleanAvg = clean(avg);
+                double value = Double.parseDouble(cleanAvg);
+                this.inflationRates.put(linePos, value);
+
+                log.info("We had date: {}, and rate: {}", date.toString(), value);
+
+            } else if(lineParts.length == 0 )
+            {
+                throw new DowFileReaderException("Couldn't read line " + linePos);
+            } else
+            {
+                log.error("Line " + linePos + " was " + lineParts.length + " long and couldn't be read, it's being skipped");
+            }
+
+        }
 
     }
 
