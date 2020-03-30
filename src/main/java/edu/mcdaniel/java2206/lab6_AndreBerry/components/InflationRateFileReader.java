@@ -1,11 +1,10 @@
-package edu.mcdaniel.java2206.lab6.components;
+package edu.mcdaniel.java2206.lab6_AndreBerry.components;
 
-import edu.mcdaniel.java2206.lab6.exceptions.InflationRateFileReaderException;
+import edu.mcdaniel.java2206.lab6_AndreBerry.exceptions.InflationRateFileReaderException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -48,7 +47,8 @@ public class InflationRateFileReader {
     /**
      * This No Argument constructor Will use the internal file.
      */
-    public InflationRateFileReader() throws NullPointerException {
+    public InflationRateFileReader() throws NullPointerException
+    {
         // If this is called, we will use the internal file
         this.irFile = new File(
                 this.getClass().getClassLoader().getResource("InfRate.csv").getFile()
@@ -60,7 +60,8 @@ public class InflationRateFileReader {
     /*
      * This one argument constructor will use the provided file.
      */
-    public InflationRateFileReader(File file){
+    public InflationRateFileReader(File file)
+    {
         this.irFile = file;  //Assumes this is not null...
     }
 
@@ -72,8 +73,10 @@ public class InflationRateFileReader {
     /**
      * This major method initializes the file.
      */
-    public void setUp() throws InflationRateFileReaderException {
-        if(!validate()){
+    public void setUp() throws InflationRateFileReaderException
+    {
+        if(!validate())
+        {
            throw new InflationRateFileReaderException("Invalid File Setup.");
         }
 
@@ -85,16 +88,22 @@ public class InflationRateFileReader {
     /**
      * Major method to read in the data
      */
-    public void read() throws InflationRateFileReaderException {
-        if(!validate() || this.inflationRates == null || this.inflationDates == null){
+    public void read() throws InflationRateFileReaderException
+    {
+        if(!validate() || this.inflationRates == null || this.inflationDates == null)
+        {
             //We validate that all parts are actually active
             throw new InflationRateFileReaderException("Invalid Setup!");
         }
 
         //Once we validate things are good, we try to read the lines of the file
-        try{
+        try
+        {
             readLines();
-        } catch (Exception ioe){
+        }
+
+        catch (Exception ioe)
+        {
             //If we get an exception of any type we need to stop execution and throw this information to the user.
             throw new InflationRateFileReaderException("Error parsing in the data!", ioe);
         }
@@ -103,15 +112,18 @@ public class InflationRateFileReader {
     /**
      * Line reader functionality
      */
-    public void readLines() throws InflationRateFileReaderException, IOException {
+    public void readLines() throws InflationRateFileReaderException, IOException
+    {
         //This is a try with resources block.  Inside of it, you have auto-closeable things, like a buffered reader
         // You use this EVERY time there is a resource with auto-closeable abilities.
         try(FileReader fileReader = new FileReader(this.irFile); //Here we make the file reader
-            BufferedReader reader = new BufferedReader(fileReader)){  //Here we make a buffered reader
+            BufferedReader reader = new BufferedReader(fileReader))
+        {  //Here we make a buffered reader
 
             String line = "";  //This will hold the lines from the file reader
             int linePos = 0;  //This will hold the position the data was taken from.
-            while((line = reader.readLine()) != null){  //This complicated logic takes a line from the reader
+            while((line = reader.readLine()) != null)
+            {  //This complicated logic takes a line from the reader
                 // and puts it into line.  Then checks to see if the line was null.
                 //The line reader will return a null when eof hits.
 
@@ -127,18 +139,22 @@ public class InflationRateFileReader {
     /**
      * Method to parse a single line
      */
-    public void readAline(String line, int linePos) throws InflationRateFileReaderException {
-        if(linePos < 0){
+    public void readAline(String line, int linePos) throws InflationRateFileReaderException
+    {
+        if(linePos < 0)
+        {
             throw new InflationRateFileReaderException("Bad Line Position: " + linePos);
         }
-        if(linePos < 3){
+        if(linePos < 3)
+        {
             return;  // We don't want to read in the header lines!
         }
         String[] lineParts = line.split(","); // Here we split on commas as this file is comma
         // separated.
 
         //I am expecting that there will be 14 columns, All filled with data.
-        if(lineParts.length == 14) {
+        if(lineParts.length == 14)
+        {
             String year = lineParts[0]; //Since the year is at pos 0;
             String avg = lineParts[13]; //Since the average is at pos 13.
 
@@ -159,9 +175,11 @@ public class InflationRateFileReader {
 
             log.info("We had date: {}, and rate: {}", date.toString(), value);
 
-        } else if(lineParts.length == 0 ) {
+        } else if(lineParts.length == 0 )
+        {
             throw new InflationRateFileReaderException("Couldn't read line " + linePos);
-        } else {
+        } else
+            {
             log.error("Line " + linePos + " was " + lineParts.length + " long and couldn't be read, it's being skipped");
         }
 
@@ -176,14 +194,16 @@ public class InflationRateFileReader {
      * validation method.
      * @return true if valid.
      */
-    public boolean validate(){
+    public boolean validate()
+    {
         return this.irFile != null && this.irFile.canRead();
     }
 
     /**
      * Percent from string remover
      */
-    private String clean(String input){
+    private String clean(String input)
+    {
         return input.substring(0, input.indexOf('%'));
     }
 
@@ -194,30 +214,36 @@ public class InflationRateFileReader {
     /**
      * Just to get the File name.
      */
-    public String getFileName(){
+    public String getFileName()
+    {
         return this.irFile.getName();
     }
 
     /**
      * Just to get the file itself
      */
-    public File getFile(){
+    public File getFile()
+    {
         return this.irFile;
     }
 
-    public Map<Integer, Double> getInflationRates() {
+    public Map<Integer, Double> getInflationRates()
+    {
         return inflationRates;
     }
 
-    public void setInflationRates(Map<Integer, Double> inflationRates) {
+    public void setInflationRates(Map<Integer, Double> inflationRates)
+    {
         this.inflationRates = inflationRates;
     }
 
-    public Map<Integer, Date> getInflationDates() {
+    public Map<Integer, Date> getInflationDates()
+    {
         return inflationDates;
     }
 
-    public void setInflationDates(Map<Integer, Date> inflationDates) {
+    public void setInflationDates(Map<Integer, Date> inflationDates)
+    {
         this.inflationDates = inflationDates;
     }
 }

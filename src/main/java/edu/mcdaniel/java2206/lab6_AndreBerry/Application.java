@@ -1,16 +1,15 @@
-package edu.mcdaniel.java2206.lab6;
+package edu.mcdaniel.java2206.lab6_AndreBerry;
 
-import edu.mcdaniel.java2206.lab6.components.DowFileReader;
-import edu.mcdaniel.java2206.lab6.components.InflationRateFileReader;
-import edu.mcdaniel.java2206.lab6.exceptions.DowFileReaderException;
-import edu.mcdaniel.java2206.lab6.exceptions.InflationRateFileReaderException;
+import edu.mcdaniel.java2206.lab6_AndreBerry.components.DowFileReader;
+import edu.mcdaniel.java2206.lab6_AndreBerry.components.InflationRateFileReader;
+import edu.mcdaniel.java2206.lab6_AndreBerry.exceptions.DowFileReaderException;
+import edu.mcdaniel.java2206.lab6_AndreBerry.exceptions.InflationRateFileReaderException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -37,7 +36,8 @@ public class Application {
     /**
      * The constructor for the Spring Boot application
      */
-    public Application(){
+    public Application()
+    {
         //This constructor is empty as no additional information need be provided.
         //This is an implemented No Argument Constructor.
     }
@@ -58,7 +58,8 @@ public class Application {
      * This method actually accomplishes the running of the code we are seeking to write
      * @param args the input from the command line.
      */
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
 
         //===// Spring Application Hook //=======================================================//
         SpringApplication.run(Application.class, args);

@@ -1,7 +1,6 @@
-package edu.mcdaniel.java2206.lab6.components;
+package edu.mcdaniel.java2206.lab6_AndreBerry.components;
 
-import edu.mcdaniel.java2206.lab6.exceptions.DowFileReaderException;
-import edu.mcdaniel.java2206.lab6.exceptions.InflationRateFileReaderException;
+import edu.mcdaniel.java2206.lab6_AndreBerry.exceptions.DowFileReaderException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -9,7 +8,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -66,7 +64,8 @@ public class DowFileReader {
     /**
      * This No Argument constructor Will use the internal file.
      */
-    public DowFileReader() throws NullPointerException {
+    public DowFileReader() throws NullPointerException
+    {
         // If this is called, we will use the internal file
         this.dowFile = new File(
                 this.getClass().getClassLoader().getResource("DJI.csv").getFile()
@@ -78,7 +77,8 @@ public class DowFileReader {
     /*
      * This one argument constructor will use the provided file.
      */
-    public DowFileReader(File file){
+    public DowFileReader(File file)
+    {
         this.dowFile = file;  //Assumes this is not null...
     }
 
@@ -90,8 +90,10 @@ public class DowFileReader {
     /**
      * This major method initializes the file.
      */
-    public void setUp() throws DowFileReaderException {
-        if(!validate()){
+    public void setUp() throws DowFileReaderException
+    {
+        if(!validate())
+        {
            throw new DowFileReaderException("Invalid File Setup.");
         }
 
@@ -107,7 +109,8 @@ public class DowFileReader {
     /**
      * Major method to read in the data
      */
-    public void read() throws DowFileReaderException {
+    public void read() throws DowFileReaderException   //checks if all five of the maps are null
+    {
         //TODO: FINISH THIS CHECK!!!
         if(!validate() || this.dowOpens == null || this.dowHighs == null
             || this.dowLows == null || this.dowClose == null || this.dowDates == null){
@@ -137,9 +140,9 @@ public class DowFileReader {
             while((line = reader.readLine()) != null){  //This complicated logic takes a line from the reader
                 // and puts it into line.  Then checks to see if the line was null.
                 //The line reader will return a null when eof hits.
+                readAline(line, linePos); //line read into data stream
 
-                //TODO: YOU HAVE TO PUT IN THE LOGIC TO MAKE THIS WORK!
-                readAline(line, linePos);
+                linePos++; //increment to get new line
             }
         }
     }
