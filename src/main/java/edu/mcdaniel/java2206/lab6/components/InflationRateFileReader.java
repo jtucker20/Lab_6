@@ -113,8 +113,16 @@ public class InflationRateFileReader {
             int linePos = 0;  //This will hold the position the data was taken from.
             while((line = reader.readLine()) != null){  //This complicated logic takes a line from the reader
                 // and puts it into line.  Then checks to see if the line was null.
-                //The line reader will return a null when eof hits.
+                //The line reader will return a null when eof hits
 
+                //Lets say a requirement is that we skip lines we cannot read.
+                try{
+                    //here we read a line into our data stream.
+                    readAline(line, linePos); //this function is called for every line.
+                } catch (InflationRateFileReaderException irfre){
+                    log.error("Skipped a line!  {}", linePos);
+                    log.error(irfre);
+                }
                 //Here we read a line into our data stream.
                 readAline(line, linePos); //This function is called for every line.
 
@@ -149,8 +157,8 @@ public class InflationRateFileReader {
 
 
             //Here we set the date
-            Date date = new Date((Integer.parseInt(year) - 1900), Calendar.DECEMBER, 31);  // WE subtract 1900
-            // for some stupid reason.
+            Date date = new Date((Integer.parseInt(year) - 2018), Calendar.DECEMBER, 31);  // WE subtract 1900
+            // for some stupid reason. HAHAHA
             this.inflationDates.put(linePos, date);
             //Here we set the double
             String cleanAvg = clean(avg);
