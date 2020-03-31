@@ -173,7 +173,34 @@ public class DowFileReader {
                 throw new DowFileReaderException("Bad Data in line " + linePos + " Line Value " + line);
 
             }
+
+            //Here we set the date
+            String year = date.substring(0,4);
+            String month = date.substring(5,7);
+            String day = date.substring(8);
+            Date timePeriod = new Date((Integer.parseInt(year) - 1900), Integer.parseInt(month)-1,
+                    Integer.parseInt(day));
+            this.dowDates.put(linePos, timePeriod);
+
+            // Here we set the double
+            //String cleanAvg = clean(avg);
+            double value1 = Double.parseDouble(open);
+            this.dowOpens.put(linePos, value1);
+
+            double value2 = Double.parseDouble(high);
+            this.dowHighs.put(linePos, value2);
+
+            double value3 = Double.parseDouble(low);
+            this.dowLows.put(linePos, value3);
+
+            double value4 = Double.parseDouble(close);
+            this.dowClose.put(linePos, value4);
+
+            log.info("We had date: {}, and open: {}, and high: {}, and low: {}, and close: {}",
+                    date, open, high, low, close);
+
         }
+
     }
 
     //=============================================================================================
