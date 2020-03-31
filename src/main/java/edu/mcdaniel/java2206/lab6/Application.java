@@ -1,18 +1,18 @@
 package edu.mcdaniel.java2206.lab6;
 
+import edu.mcdaniel.java2206.lab6.components.CombinedFileWriter;
 import edu.mcdaniel.java2206.lab6.components.DowFileReader;
 import edu.mcdaniel.java2206.lab6.components.InflationRateFileReader;
 import edu.mcdaniel.java2206.lab6.exceptions.DowFileReaderException;
+import edu.mcdaniel.java2206.lab6.exceptions.FileWriterException;
 import edu.mcdaniel.java2206.lab6.exceptions.InflationRateFileReaderException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * This class is designed to start/wrap your class.
@@ -85,8 +85,9 @@ public class Application {
 
             }
 
-        } catch (NullPointerException | InflationRateFileReaderException npe){
+        } catch (NullPointerException | InflationRateFileReaderException | IOException npe){
             log.error(npe);
+
         }
 
         try{
@@ -115,6 +116,23 @@ public class Application {
             }
         } catch (DowFileReaderException dfre){
             log.error(dfre);
+        }
+
+        CombinedFileWriter combinedFileWriter = new CombinedFileWriter("temp2", "txt")
+                .withNamedFile().validate();
+
+        List<String> infoToWriteToFile = new ArrayList<>();
+        infoToWriteToFile.add("Hello World!");
+
+        boolean wrote = false;
+        try {
+             wrote = combinedFileWriter.writeFileContents(infoToWriteToFile);
+        } catch(IOException ioe){
+            log.error(new FileWriterException("Failed to Write.", ioe));
+        }
+
+        if(wrote){
+            log.info("SUCCESS!!!!!");
         }
 
     }

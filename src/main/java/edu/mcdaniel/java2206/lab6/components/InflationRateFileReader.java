@@ -85,27 +85,37 @@ public class InflationRateFileReader {
     /**
      * Major method to read in the data
      */
-    public void read() throws InflationRateFileReaderException {
-        if(!validate() || this.inflationRates == null || this.inflationDates == null){
-            //We validate that all parts are actually active
-            throw new InflationRateFileReaderException("Invalid Setup!");
+    //Pretend that our requirements changed to allow only IOEXCEPTIONS.
+    public void read() throws IOException {
+        if(!validate()){
+            if(this.irFile == null){
+                throw new IOException("The Interest Rate File is null!");
+            }
+            if(!this.irFile.canRead()){
+                throw new IOException("The Interest Rate File cannot be read!");
+            }
+        }
+
+        log.trace("File Validated. {}", this.irFile.getAbsolutePath());
+        if(this.inflationRates == null){
+            this.inflationRates = new HashMap<>();
+        }
+        if(this.inflationDates == null){
+            this.inflationDates = new HashMap<>();
         }
 
         //Once we validate things are good, we try to read the lines of the file
-        try{
-            readLines();
-        } catch (Exception ioe){
-            //If we get an exception of any type we need to stop execution and throw this information to the user.
-            throw new InflationRateFileReaderException("Error parsing in the data!", ioe);
-        }
+        readLines();
+
     }
 
     /**
      * Line reader functionality
      */
-    public void readLines() throws InflationRateFileReaderException, IOException {
+    public void readLines() throws IOException {
         //This is a try with resources block.  Inside of it, you have auto-closeable things, like a buffered reader
         // You use this EVERY time there is a resource with auto-closeable abilities.
+
         try(FileReader fileReader = new FileReader(this.irFile); //Here we make the file reader
             BufferedReader reader = new BufferedReader(fileReader)){  //Here we make a buffered reader
 
@@ -115,9 +125,14 @@ public class InflationRateFileReader {
                 // and puts it into line.  Then checks to see if the line was null.
                 //The line reader will return a null when eof hits.
 
-                //Here we read a line into our data stream.
-                readAline(line, linePos); //This function is called for every line.
-
+                //Lets say a requirement is that we skip lines we cannot read.
+                try {
+                    //Here we read a line into our data stream.
+                    readAline(line, linePos); //This function is called for every line.
+                } catch (InflationRateFileReaderException irfre){
+                    log.error("Skipped a line! {}", linePos);
+                    log.error(irfre);
+                }
                 //Here we increment to let us know we got to a new line.
                 linePos++;
             }
