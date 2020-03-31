@@ -159,7 +159,8 @@ public class InflationRateFileReader {
             String avg = lineParts[13]; //Since the average is at pos 13.
 
             //Now to check we have values we are expecting!
-            if(year == null || year.isBlank() || year.isEmpty() || avg == null || avg.isBlank() || avg.isEmpty()){
+            if(year == null || year.isBlank() || year.isEmpty() || avg == null || avg.isBlank() || avg.isEmpty())
+            {
                 throw new InflationRateFileReaderException("Bad Data in line " + linePos + " Line Value " + line);
             }
 
@@ -226,6 +227,8 @@ public class InflationRateFileReader {
     {
         return this.irFile;
     }
+
+    //Below are the values ebing pulled into local variables
 
     public Map<Integer, Double> getInflationRates()
     {

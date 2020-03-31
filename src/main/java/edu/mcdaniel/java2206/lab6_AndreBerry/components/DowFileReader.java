@@ -181,11 +181,11 @@ public class DowFileReader {
                 //Here we set the date
                 Date date = new Date((Integer.parseInt(year) - 1900), Calendar.DECEMBER, 31);  // WE subtract 1900
                 // for some stupid reason.
-                this.inflationDates.put(linePos, date);
+                this.dowDates.put(linePos, date);
                 //Here we set the double
                 String cleanAvg = clean(avg);
                 double value = Double.parseDouble(cleanAvg);
-                this.inflationRates.put(linePos, value);
+                this.dowOpens.put(linePos, value);
 
                 log.info("We had date: {}, and rate: {}", date.toString(), value);
 
@@ -210,10 +210,16 @@ public class DowFileReader {
      * validation method.
      * @return true if valid.
      */
-    public boolean validate(){
+    public boolean validate()
+    {
         return this.dowFile != null && this.dowFile.canRead();
     }
 
+
+    private String clean(String input)
+    {
+        return input.substring(0, input.indexOf('%'));
+    }
 
     //=============================================================================================
     // Getters and Setters
@@ -222,34 +228,43 @@ public class DowFileReader {
     /**
      * Just to get the File name.
      */
-    public String getFileName(){
+    public String getFileName()
+    {
         return this.dowFile.getName();
     }
 
     /**
      * Just to get the file itself
      */
-    public File getFile(){
+    public File getFile()
+    {
         return this.dowFile;
     }
 
-    public Map<Integer, Double> getDowOpens() {
+    //Below are the values that need to get local variables
+
+    public Map<Integer, Double> getDowOpens()
+    {
         return dowOpens;
     }
 
-    public void setDowOpens(Map<Integer, Double> dowOpens) {
+    public void setDowOpens(Map<Integer, Double> dowOpens)
+    {
         this.dowOpens = dowOpens;
     }
 
-    public Map<Integer, Double> getDowHighs() {
+    public Map<Integer, Double> getDowHighs()
+    {
         return dowHighs;
     }
 
-    public void setDowHighs(Map<Integer, Double> dowHighs) {
+    public void setDowHighs(Map<Integer, Double> dowHighs)
+    {
         this.dowHighs = dowHighs;
     }
 
-    public Map<Integer, Double> getDowLows() {
+    public Map<Integer, Double> getDowLows()
+    {
         return dowLows;
     }
 
@@ -257,19 +272,23 @@ public class DowFileReader {
         this.dowLows = dowLows;
     }
 
-    public Map<Integer, Double> getDowClose() {
+    public Map<Integer, Double> getDowClose()
+    {
         return dowClose;
     }
 
-    public void setDowClose(Map<Integer, Double> dowClose) {
+    public void setDowClose(Map<Integer, Double> dowClose)
+    {
         this.dowClose = dowClose;
     }
 
-    public Map<Integer, Date> getDowDates() {
+    public Map<Integer, Date> getDowDates()
+    {
         return dowDates;
     }
 
-    public void setDowDates(Map<Integer, Date> dowDates) {
+    public void setDowDates(Map<Integer, Date> dowDates)
+    {
         this.dowDates = dowDates;
     }
 }
