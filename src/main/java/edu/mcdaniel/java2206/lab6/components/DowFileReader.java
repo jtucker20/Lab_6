@@ -140,6 +140,7 @@ public class DowFileReader {
 
                 //TODO: YOU HAVE TO PUT IN THE LOGIC TO MAKE THIS WORK!
                 readAline(line, linePos);
+                linePos++;
             }
         }
     }
@@ -148,14 +149,40 @@ public class DowFileReader {
      * Method to parse a single line
      */
     public void readAline(String line, int linePos) throws DowFileReaderException {
+        if(linePos < 0){
+            throw new DowFileReaderException("Bad Line Position: " + linePos);
+        }
+        if(linePos < 3) {
+            return;  // We don't want to read in the header lines!
+        }
+        String[] lineParts = line.split(","); // Here we split on commas as this file is comma
+        // separated.
 
-        //TODO: FOLLOW THE EXAMPLE IN InflationRateFileReader for help with this method!
+        //I am expecting that there will be 14 columns, All filled with data.
+        if(lineParts.length == 7) {
+            String date = lineParts[0]; //Since the year is at pos 0;
+            String open = lineParts[1]; //Since the average is at pos 1;
+            String high = lineParts[2]; //Since the average is at pos 2;
+            String low  = lineParts[3]; //Since the average is at pos 3;
+            String close = lineParts[4];//Since the average is at pos 4;
 
+            //Now to check we have values we are expecting!
+            if(date == null || date.isBlank() || date.isEmpty() || open == null || open.isBlank() || open.isEmpty()
+              || high == null || high.isBlank() || high.isEmpty() || low == null || low.isBlank() || low.isEmpty()
+              || close == null || close.isBlank() || close.isEmpty()) {
+                throw new DowFileReaderException("Bad Data in line " + linePos + " Line Value " + line);
 
-    }
+            }
+            //Here we set the date
+                        Date timePeriod = new Date((Integer.parseInt(date) - 1900), Calendar.DECEMBER, 31);  // WE subtract 1900
+        //TO            // for some stupid reason.DO: FOLLOW THE EXAMPLE IN InflationRateFileReader for help with this method!
+                        this.dowOpens.put(timePeriod, Date);
+                        //Here we set the double
+                        String cleanAvg = clean(avg);
+    }                   double value = Double.parseDouble(cleanAvg);
+                        this.inflationRates.put(linePos, value);
 
-
-    //=============================================================================================
+    //======            log.info("We had date: {}, and rate: {}", date.toString(), value);=======================================================================================
     // Minor Methods(s)
     //=============================================================================================
 
