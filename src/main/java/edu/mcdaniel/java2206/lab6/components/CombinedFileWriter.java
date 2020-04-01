@@ -32,7 +32,7 @@ public class CombinedFileWriter {
     //Major Methods
     //Pattern "With"
     public CombinedFileWriter withNamedFile(){
-        this.file = (new FileCreator()).createFileSafe(this.fileName, this.ext);
+        this.file = (new FileCreator()).createFileSafeRecursive(this.fileName, this.ext);
         return this;
     }
 
