@@ -89,6 +89,8 @@ public class Application {
             log.error(npe);
         }
 
+        //While debugging my code, this was a way for me to see
+        // how far the code was getting before it was getting hung up
         try{
             DowFileReader dowFileReader = new DowFileReader();
             log.error("We are here");
