@@ -172,11 +172,11 @@ public class DowFileReader {
             //Here we set the date
             Date date = new Date((Integer.parseInt(year) - 1900), Calendar.DECEMBER, 31);  // WE subtract 1900
             // for some stupid reason.
-            this.put(linePos, date);
+            this.dowDates.put(linePos, date);
             //Here we set the double
             String cleanAvg = clean(avg);
             double value = Double.parseDouble(cleanAvg);
-            this.put(linePos, value);
+            this.dowHighs.put(linePos, value);
 
             log.info("We had date: {}, and rate: {}", date.toString(), value);
 
