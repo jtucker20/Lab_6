@@ -87,7 +87,7 @@ public class InflationRateFileReader {
 
 
 
-    public void read() throws IOException {
+    public void read() throws IOException, InflationRateFileReaderException {
         if(!validate()){
             //We validate that all parts are actually active
             if(this.irFile == null){

@@ -1,4 +1,4 @@
-package edu.mcdaniel.java2206.lab6_MalcolmWatts.components;
+/*package edu.mcdaniel.java2206.lab6_MalcolmWatts.components;
 import java.io.File;
 import java.util.List;
 
@@ -42,3 +42,4 @@ public class CombinedFileWriter {
         }
     }
 }
+*/

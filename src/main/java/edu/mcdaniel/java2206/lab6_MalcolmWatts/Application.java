@@ -1,7 +1,7 @@
 package edu.mcdaniel.java2206.lab6_MalcolmWatts;
 
 import edu.mcdaniel.java2206.lab6_MalcolmWatts.components.DowFileReader;
-import edu.mcdaniel.java2206.lab6_MalcolmWatts.components.CombinedFileWriter;
+//import edu.mcdaniel.java2206.lab6_MalcolmWatts.components.CombinedFileWriter;
 import edu.mcdaniel.java2206.lab6_MalcolmWatts.components.InflationRateFileReader;
 import edu.mcdaniel.java2206.lab6_MalcolmWatts.exceptions.DowFileReaderException;
 import edu.mcdaniel.java2206.lab6_MalcolmWatts.exceptions.InflationRateFileReaderException;
@@ -39,7 +39,7 @@ public class Application {
     /**
      * The constructor for the Spring Boot application
      */
-    public Application(){
+    public Application() {
         //This constructor is empty as no additional information need be provided.
         //This is an implemented No Argument Constructor.
     }
@@ -58,6 +58,7 @@ public class Application {
 
     /**
      * This method actually accomplishes the running of the code we are seeking to write
+     *
      * @param args the input from the command line.
      */
     public static void main(String[] args) {
@@ -87,11 +88,11 @@ public class Application {
 
             }
 
-        } catch (NullPointerException | IOException | InflationRateFileReaderException npe){
+        } catch (NullPointerException | IOException | InflationRateFileReaderException npe) {
             log.error(npe);
         }
 
-        try{
+        try {
             DowFileReader dowFileReader = new DowFileReader();
             dowFileReader.validate();
             dowFileReader.setUp();
@@ -107,19 +108,19 @@ public class Application {
             Set<Map.Entry<Integer, Double>> entrySet = opens.entrySet();
             for (Map.Entry<Integer, Double> entry : entrySet) {
                 log.info("The Open {}. The High {}. The Low {}. The Close {}. For {}",
-                                entry.getValue(),
-                                highs.get(entry.getKey()),
-                                lows.get(entry.getKey()),
-                                closes.get(entry.getKey()),
-                                dates.get(entry.getKey()).toString()
-                                );
+                        entry.getValue(),
+                        highs.get(entry.getKey()),
+                        lows.get(entry.getKey()),
+                        closes.get(entry.getKey()),
+                        dates.get(entry.getKey()).toString()
+                );
 
             }
-        } catch (DowFileReaderException dfre){
+        } catch (DowFileReaderException dfre) {
             log.error(dfre);
         }
 
-
+/*
         CombinedFileWriter combinedFileWriter = new CombinedFileWriter("temp1", "txt")
                 .withNamedFile().validate();
         List<String> infoToFile.add("Hello World");
@@ -137,18 +138,18 @@ public class Application {
 
     }
 
+*/
+        //=============================================================================================
+        // Minor Methods(s)
+        //=============================================================================================
 
-    //=============================================================================================
-    // Minor Methods(s)
-    //=============================================================================================
-
-    //No minor methods made for this class
+        //No minor methods made for this class
 
 
-    //=============================================================================================
-    // Getters and Setters
-    //=============================================================================================
+        //=============================================================================================
+        // Getters and Setters
+        //=============================================================================================
 
-    //No private assets we want to expose in this class
-
+        //No private assets we want to expose in this class
+    }
 }
