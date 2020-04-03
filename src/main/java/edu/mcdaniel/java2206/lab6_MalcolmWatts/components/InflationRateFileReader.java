@@ -1,11 +1,10 @@
-package edu.mcdaniel.java2206.lab6.components;
+package edu.mcdaniel.java2206.lab6_MalcolmWatts.components;
 
-import edu.mcdaniel.java2206.lab6.exceptions.InflationRateFileReaderException;
+import edu.mcdaniel.java2206.lab6_MalcolmWatts.exceptions.InflationRateFileReaderException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -85,19 +84,27 @@ public class InflationRateFileReader {
     /**
      * Major method to read in the data
      */
-    public void read() throws InflationRateFileReaderException {
-        if(!validate() || this.inflationRates == null || this.inflationDates == null){
-            //We validate that all parts are actually active
-            throw new InflationRateFileReaderException("Invalid Setup!");
-        }
 
-        //Once we validate things are good, we try to read the lines of the file
-        try{
-            readLines();
-        } catch (Exception ioe){
-            //If we get an exception of any type we need to stop execution and throw this information to the user.
-            throw new InflationRateFileReaderException("Error parsing in the data!", ioe);
+
+
+    public void read() throws IOException {
+        if(!validate()){
+            //We validate that all parts are actually active
+            if(this.irFile == null){
+                throw new IOException("the Interest Rate File cannot be read!");
+            }
+            if(!this.irFile.canRead()){
+                throw new IOException("The Interest Rate File cannot be read!");
+            }
         }
+        log.trace("File Validated. {}", this.irFile.getAbsolutePath());
+        if(this.inflationRates == null){
+            this.inflationRates = new HashMap<>();
+        }
+        if(this.inflationDates == null){
+            this.inflationDates = new HashMap<>();
+        }
+        readLines();
     }
 
     /**
@@ -115,11 +122,17 @@ public class InflationRateFileReader {
                 // and puts it into line.  Then checks to see if the line was null.
                 //The line reader will return a null when eof hits.
 
-                //Here we read a line into our data stream.
-                readAline(line, linePos); //This function is called for every line.
 
-                //Here we increment to let us know we got to a new line.
-                linePos++;
+                try{
+                    //read a line into the data stream
+                    readAline(line, linePos); //called for every line
+
+                } catch (InflationRateFileReaderException irfre) {
+                    log.error("skipped a line! {}", linePos);
+                    log.error(irfre);
+                    //Here we increment to let us know we got to a new line.
+                    linePos++;
+                }
             }
         }
     }

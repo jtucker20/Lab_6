@@ -1,4 +1,4 @@
-package edu.mcdaniel.java2206.lab6.exceptions;
+package edu.mcdaniel.java2206.lab6_MalcolmWatts.exceptions;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
