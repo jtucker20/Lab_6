@@ -138,8 +138,11 @@ public class DowFileReader {
                 // and puts it into line.  Then checks to see if the line was null.
                 //The line reader will return a null when eof hits.
 
-                //TODO: YOU HAVE TO PUT IN THE LOGIC TO MAKE THIS WORK!
-                readAline(line, linePos);
+                //Here we read a line into our data stream.
+                readAline(line, linePos); //This function is called for every line.
+
+                //Here we increment to let us know we got to a new line.
+                linePos++;
             }
         }
     }
@@ -149,7 +152,40 @@ public class DowFileReader {
      */
     public void readAline(String line, int linePos) throws DowFileReaderException {
 
-        //TODO: FOLLOW THE EXAMPLE IN InflationRateFileReader for help with this method!
+        if(linePos < 0){
+            throw new DowFileReaderException("Bad Line Position: " + linePos);
+        }
+        if(linePos < 3){
+            return;  // We don't want to read in the header lines!
+        }
+        String[] lineParts = line.split(","); // Here we split on commas as this file is comma
+        // separated.
+
+        //I am expecting that there will be 14 columns, All filled with data.
+        if(lineParts.length == 14) {
+            String year = lineParts[0]; //Since the year is at pos 0;
+            String avg = lineParts[13]; //Since the average is at pos 13.
+
+            //Now to check we have values we are expecting!
+            if(year == null || year.isBlank() || year.isEmpty() || avg == null || avg.isBlank() || avg.isEmpty()){
+                throw new DowFileReaderException("Bad Data in line " + linePos + " Line Value " + line);
+            }
+
+
+            //Here we set the date
+            Date date = new Date((Integer.parseInt(year) - 1900), Calendar.DECEMBER, 31);  // WE subtract 1900
+            // for some stupid reason.
+            this.dowDates.put(linePos, date);
+            //Here we set the double
+            double value = Double.parseDouble(avg);
+
+            log.info("We had date: {}, and rate: {}", date.toString(), value);
+
+        } else if(lineParts.length == 0 ) {
+            throw new DowFileReaderException("Couldn't read line " + linePos);
+        } else {
+            log.error("Line " + linePos + " was " + lineParts.length + " long and couldn't be read, it's being skipped");
+        }
 
 
     }
