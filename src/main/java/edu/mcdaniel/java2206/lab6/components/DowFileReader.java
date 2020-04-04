@@ -171,7 +171,6 @@ public class DowFileReader {
                 throw new DowFileReaderException("Bad Data in line " + linePos + " Line Value " + line);
             }
 
-
             //Here we set the date
             Date date = new Date((Integer.parseInt(year) - 1900), Calendar.DECEMBER, 31);  // WE subtract 1900
             // for some stupid reason.
